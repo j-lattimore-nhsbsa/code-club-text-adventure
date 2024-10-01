@@ -1,0 +1,116 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">Three stone ogres</h1>
+
+    <p class="govuk-heading-s">Quite why or how they're there, you do not know, only that they're definitely unmistakably there.</p>
+    <p class="govuk-body">Three giant ogres, fixed into some quite improbable positions as they reach out in various directions as if in pursuit of some long escaped target.</p>
+    <p class="govuk-body">You can't help but shake off the thought that you've seen this before and this is all wildy derivative.</p>
+    
+    <p class="govuk-body">One thing is different however - a stone portal that crackles and hums with a static menace. You remain still and watch.</p>
+
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+
+
+    {% set directionOptions %}
+
+     <!-- EXITS 13, N9, E14, W12 -->
+
+        {{ govukRadios({
+          name: 'location',
+          fieldset: {
+            legend: {
+              text: 'OK, but now what direction to take?',
+              isPageHeading: true,
+              classes: 'govuk-fieldset__legend--m'
+            }
+          },
+          items: [
+            {
+              value: 9,
+              text: 'North'
+            },
+            {
+              value: 14,
+              text: 'East'
+            },
+            {
+              value: 12,
+              text: 'West'
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: 'Choose direction'
+        }) }}
+
+    {% endset %}
+
+
+    {% set thisLocation = 13 %}
+    {% set thisPage = 'three-stone-ogres' %}
+
+    {% if kelRathaLocation === thisLocation and data.portalsActive === 'true' %}
+
+      <p class="govuk-body"><em>Suddenly, a flash of lurid light and there stands KEL-RATHA!</em></p>
+
+      {% if data.hasBanana === 'true' %}
+
+        <!-- PLAYER HAS BANANA -->
+        <p class="govuk-body"><em>As the assassin darts between the petrified figures you feel for certain that your time has come. But then, inexplicably, the assassin notices the tip of the banana peeking from your pocket. He squeals in terror and flees, almost hitting an ogre on his frantic darting back into the undergrowth.</em></p>
+        <hr class="govuk-section-break govuk-section-break--l">
+
+        <form action="{{ thisPage }}" method="post" novalidate>
+
+          <input name="previousLocation" type="hidden" value="{{ thisLocation }}" />
+          <input name="portalsActive" type="hidden" value="false" />
+          {{ directionOptions | safe }}
+
+        </form>
+
+      {% else %}
+
+        <!-- PLAYER IS KILLED -->
+        <p class="govuk-body"><em>With a deadly grace, the assassin darts between the petrified figures as he works his way towards you. With a final flash of steel you fall lifeless to the floor.</em></p>
+        <hr class="govuk-section-break govuk-section-break--l">
+
+	      {{ govukWarningText({
+          text: 'You died'
+        }) }}
+
+        <form action="reset-game" method="post" novalidate>
+          {{ govukButton({
+            text: 'Start new game'
+          }) }}
+        </form>
+
+      {% endif %}
+
+    {% else %}
+
+       <!-- PORTAL REMAINS CLOSED -->
+      <p class="govuk-body"><em>The portal hums and you hold you breath, but ultimately - nothing happens.</em></p>
+      <hr class="govuk-section-break govuk-section-break--l">
+      
+      <form action="{{ thisPage }}" method="post" novalidate>
+
+        <input name="previousLocation" type="hidden" value="{{ thisLocation }}" />
+        {{ directionOptions | safe }}
+
+      </form>
+
+    {% endif %}
+
+
+  </div>
+</div>
+
+{{ data | debugData | safe }}
+
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">Amidst the banana trees</h1>
+
+    <p class="govuk-heading-s">It takes a moment for you to realise the difference, but once you do, it's unmistakable.</p>
+    <p class="govuk-body">You've found yourself amidst a copse of banana trees. Their leaves seem comically large and you're not quite sure how this plays from a botanical perspective, but think nothing of it, considering that you're in a story featuring witches and magic.</p>
+    
+    {% if data.hasBanana !== 'true' %}
+      <p class="govuk-body">You spot a thick bunch of bananas hanging in front of your face. They look delicious, so you snap one off and tuck it away for later.</p>
+    {% endif %}
+    
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+    <p class="govuk-body"><em>As pleasant as this is, you can't remain here.</em></p>
+
+    <hr class="govuk-section-break govuk-section-break--l">
+
+     <!-- EXITS 5,  N1, S6, W4 -->
+
+      <form action="amidst-the-banana-trees" method="post" novalidate>
+
+        <input name="previousLocation" type="hidden" value="5" />
+        <input name="hasBanana" type="hidden" value="true" />
+
+        {{ govukRadios({
+          name: 'location',
+          fieldset: {
+            legend: {
+              text: 'You have three paths open to you...',
+              isPageHeading: true,
+              classes: 'govuk-fieldset__legend--m'
+            }
+          },
+          items: [
+            {
+              value: 1,
+              text: 'North'
+            },
+             {
+              value: 6,
+              text: 'South'
+            },
+            {
+              value: 4,
+              text: 'West'
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: 'Choose direction'
+        }) }}
+
+      </form>
+
+  </div>
+</div>
+
+{{ data | debugData | safe }}
+
+{% endblock %}

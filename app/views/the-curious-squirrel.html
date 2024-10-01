@@ -1,0 +1,113 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">The curious squirrel</h1>
+
+    <p class="govuk-heading-s">You didn't see him at first, but a quick twitch of his tail reveals his presence.</p>
+    <p class="govuk-body">A squirrel eyes you closely, sat beside a stream that emerges from a large cliff face and flows away to the North.</p>
+    <p class="govuk-body">As you stare at him, you realise that actually, he could just be focused on the portal that squats ominously behind you stripping away the vegetation.</p>
+  
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+
+        {% set directionOptions %}
+
+        <!-- EXITS 12, N8, E13 -->
+
+        {{ govukRadios({
+          name: 'location',
+          fieldset: {
+            legend: {
+              text: 'Which way will you head next?',
+              isPageHeading: true,
+              classes: 'govuk-fieldset__legend--m'
+            }
+          },
+          items: [
+            {
+              value: 8,
+              text: 'North'
+            },
+            {
+              value: 13,
+              text: 'East'
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: 'Choose direction'
+        }) }}
+
+      {% endset %}
+
+
+      {% set thisLocation = 12 %}
+      {% set thisPage = 'the-curious-squirrel' %}
+
+    {% if kelRathaLocation === thisLocation and data.portalsActive === 'true' %}
+
+      <p class="govuk-body"><em>Suddenly, a flash of lurid light and there stands KEL-RATHA!</em></p>
+
+      {% if data.hasBanana === 'true' %}
+
+        <!-- PLAYER HAS BANANA -->
+        <p class="govuk-body"><em>The squirrel flees first, disturbed by the hiss and crackle of the portal's opening. But then, improbably, the assassin notices the banana you've tucked away, screams and flees into the forest.</em></p>
+        <p class="govuk-body"><em>And suddenly, you are left alone. Alone and very, very confused.</em></p>
+
+        <hr class="govuk-section-break govuk-section-break--l">
+
+        <form action="{{ thisPage }}" method="post" novalidate>
+
+          <input name="previousLocation" type="hidden" value="{{ thisLocation }}" />
+          <input name="portalsActive" type="hidden" value="false" />
+          {{ directionOptions | safe }}
+
+        </form>
+
+      {% else %}
+
+        <!-- PLAYER IS KILLED -->
+        <p class="govuk-body"><em>The squirrel's eyes remain fixed on you as the assassin closes the space between you in a matter of mere moments, blades flashing and glinting in the ethereal light of the open portal. "So the squirrel was looking at me" is your final thought.</em></p>
+        <hr class="govuk-section-break govuk-section-break--l">
+
+	      {{ govukWarningText({
+          text: 'You died'
+        }) }}
+
+        <form action="reset-game" method="post" novalidate>
+          {{ govukButton({
+            text: 'Start new game'
+          }) }}
+        </form>
+
+      {% endif %}
+
+    {% else %}
+
+       <!-- PORTAL REMAINS CLOSED -->
+      <p class="govuk-body"><em>The portal hums, but remains thankfully inert. The squirrel remains transfixed.</em></p>
+      <hr class="govuk-section-break govuk-section-break--l">
+      
+      <form action="{{ thisPage }}" method="post" novalidate>
+
+        <input name="previousLocation" type="hidden" value="{{ thisLocation }}" />
+        {{ directionOptions | safe }}
+
+      </form>
+
+    {% endif %}
+
+
+
+
+  </div>
+</div>
+
+{{ data | debugData | safe }}
+
+{% endblock %}

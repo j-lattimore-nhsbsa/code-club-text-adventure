@@ -1,0 +1,113 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">A forest clearing</h1>
+
+    <p class="govuk-heading-s">A stream flows away to the North, but your main focus is the portal that stands before you.</p>
+    <p class="govuk-body">Bare earth and strewn rock surround it, with the forest pushed back into a lifeless clearing by the foul magic that hums deep and low and menacingly all around.</p>
+    
+    
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+     {% set directionOptions %}
+
+      <!-- EXITS 8,  N4, E9, S12 -->
+
+        {{ govukRadios({
+          name: 'location',
+          fieldset: {
+            legend: {
+              text: 'It is time to move on...',
+              isPageHeading: true,
+              classes: 'govuk-fieldset__legend--m'
+            }
+          },
+          items: [
+            {
+              value: 4,
+              text: 'North'
+            },
+            {
+              value: 9,
+              text: 'East'
+            },
+            {
+              value: 12,
+              text: 'South'
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: 'Choose direction'
+        }) }}
+
+    </form>
+
+     {% endset %}
+
+     {% set thisLocation = 8 %}
+     {% set thisPage = 'a-forest-clearing' %}
+
+    {% if kelRathaLocation === thisLocation and data.portalsActive === 'true' %}
+
+      <p class="govuk-body"><em>Suddenly, a flash of lurid light and there stands KEL-RATHA!</em></p>
+
+      {% if data.hasBanana === 'true' %}
+
+        <!-- PLAYER HAS BANANA -->
+        <p class="govuk-body"><em>For a moment, there is nothing but the noise of the stream and the bass of the portal hum. But then, a high-pitched shriek reverberates about the clearing as the assassin notices the banana in your pocket. He flees into the forest, sending a flock of dark-winged birds into wild panic as they take to the sky.</em></p>
+        <hr class="govuk-section-break govuk-section-break--l">
+
+        <form action="{{ thisPage }}" method="post" novalidate>
+
+          <input name="previousLocation" type="hidden" value="{{ thisLocation }}" />
+          <input name="portalsActive" type="hidden" value="false" />
+          {{ directionOptions | safe }}
+
+        </form>
+
+      {% else %}
+
+        <!-- PLAYER IS KILLED -->
+        <p class="govuk-body"><em>For a moment, there is nothing but the noise of the stream and the bass of the portal hum. But then there is the sound of a soft shuffle, and the gurgle of blood spilling from your body, and a soft chuckle from the assassin as you gently fade into oblivion.</em></p>
+        <hr class="govuk-section-break govuk-section-break--l">
+
+	      {{ govukWarningText({
+          text: 'You died'
+        }) }}
+
+        <form action="reset-game" method="post" novalidate>
+          {{ govukButton({
+            text: 'Start new game'
+          }) }}
+        </form>
+
+      {% endif %}
+
+    {% else %}
+
+       <!-- PORTAL REMAINS CLOSED -->
+      <p class="govuk-body"><em>You close your eyes and listen to the stream and the hum, but nothing changes. The portal remains inert.</em></p>
+      <hr class="govuk-section-break govuk-section-break--l">
+      
+      <form action="{{ thisPage }}" method="post" novalidate>
+
+        <input name="previousLocation" type="hidden" value="{{ thisLocation }}" />
+        {{ directionOptions | safe }}
+
+      </form>
+
+    {% endif %}
+
+
+  </div>
+</div>
+
+{{ data | debugData | safe }}
+
+{% endblock %}

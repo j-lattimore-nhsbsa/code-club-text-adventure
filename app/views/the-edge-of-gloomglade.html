@@ -1,0 +1,66 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    
+
+    <h1 class="govuk-heading-l">The edge of Gloomglade</h1>
+
+    <p class="govuk-heading-s">Your first impressions of this "haunted forest" are somewhat underwhelming it has to be said.</p>
+
+    <p class="govuk-body">The trees gently rise up around gentle slopes, the space between thick with lush ferns and the moist mulch from which they sprout. It's a picturesque sight as you wind your way through the natural path amidst the foliage.</p>
+    
+    
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+    <p class="govuk-body"><em>Eventually, you come to a crossroads of sorts.</em></p>
+
+
+
+
+    <hr class="govuk-section-break govuk-section-break--l">
+
+     <!-- EXITS 0,  E1, S4 -->
+
+      <form action="the-edge-of-gloomglade" method="post" novalidate>
+
+        <input name="previousLocation" type="hidden" value="0" />
+
+        {{ govukRadios({
+          name: 'location',
+          fieldset: {
+            legend: {
+              text: 'Which way will you head next?',
+              isPageHeading: true,
+              classes: 'govuk-fieldset__legend--m'
+            }
+          },
+          items: [
+            {
+              value: 1,
+              text: 'East'
+            },
+            {
+              value: 4,
+              text: 'South'
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: 'Choose direction'
+        }) }}
+
+    </form>
+
+
+
+  </div>
+</div>
+
+{{ data | debugData | safe }}
+
+{% endblock %}

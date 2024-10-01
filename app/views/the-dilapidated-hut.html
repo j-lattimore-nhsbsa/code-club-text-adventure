@@ -1,0 +1,118 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">The dilapidated hut</h1>
+
+    <p class="govuk-heading-s">The hut looks like it's seen better days.</p>
+    <p class="govuk-body">It's a simple construction of wood and branch with a tightly weaved roof of wicker and banana leaf. It's aged, certainly, but the small clearing surrounding it is well kept. Raised beds nurture a selection of vegetables, flowers and herbs.</p>
+    <p class="govuk-body">As you approach, you hear a whistling, and then soon after you spot her - an elderly lady sweeping the floor of her hut.</p>
+    
+    <p class="govuk-body"><em>"Hello dear",</em> she greets you cheerily, <em>"you wouldn't happen to have an apple would you, I'm just a bit peckish?"</em></p>
+
+
+    {% if data.hasApple === 'true' %}
+
+        <!-- PLAYER HANDS OVER THE APPLE -->
+        <p class="govuk-body">You take the apple from your knapsack and hand it to her. She seems over the moon. <em>"Oh thank you dear",</em> and takes a bite from it with gusto.</p>
+
+        {% if data.hasAxe === 'true' %}
+
+          <!-- PLAYER ALREADY HAS THE AXE -->
+          <p class="govuk-body">She glances down at the axe hanging from your belt. <em>"Oh my, the Maiden's Greataxe! That once belonged to a legendary warrior of light. They say it can cut anything. Even dragonscale hide. Everso useful." she smiles.</em></p>
+          
+          {% if data.hasBanana === 'false' %}
+  
+            <!-- GIVE THE PLAYER A BANANA INSTEAD -->
+            <p class="govuk-body"><em>"Oh, but do you know what you don't have that you might find useful? A nice plump banana."</em> she giggles wickedly as she stuffs it insistently into your pocket and abruptly walks away.</p>
+            {% set extraValues %}
+              <input name="hasBanana" type="hidden" value="true" />
+              <input name="hasApple" type="hidden" value="false" />
+            {% endset %}
+
+          {% else %}
+
+            <!-- THE PLAYER HAS EVERYTHING THEY NEED ALREADY -->
+            <p class="govuk-body"><em>"Well, aren't you a resourceful sort! You certainly don't need any help from me."</em> she smiles happily and dawdles away.</p>
+            {% set extraValues %}
+              <input name="hasApple" type="hidden" value="false" />
+            {% endset %}
+
+          {% endif %}
+
+        
+        {% else %}
+
+          <!-- PLAYER GETS DIRECTIONS TO AXE -->
+          <p class="govuk-body"><em>"Well dear, one good turn deserves another and I'm pretty certain you'll be wanting something to help you beat that bothersome green dragon, yes?"</em>, she looks at you expectantly and you give a little nod.</p>
+          <p class="govuk-body"><em>"Ah! I knew it. Well if you want to head <strong>North, North, East</strong> and then <strong>South</strong>, you'll find something very useful". She winks, makes her apologies and heads back over to her hut.</em></p>
+          {% set extraValues %}
+              <input name="hasApple" type="hidden" value="false" />
+            {% endset %}
+
+        {% endif %}
+
+    {% else %}
+
+      <!-- PLAYER DOESN'T HAVE THE APPLE -->
+      <p class="govuk-body">You shrug your shoulders and look a bit sheepish. <em>"Ah, worry not my dear. I can find one later."</em> and she walks away, back to her chores.</p>
+
+    {% endif %}
+
+
+
+    
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+    <p class="govuk-body"><em>You still have questions to ask. But it's probably just wiser to move on.</em></p>
+
+
+    <hr class="govuk-section-break govuk-section-break--l">
+
+     <!-- EXITS 10, N6, E11, S10 -->
+
+      <form action="the-dilapidated-hut" method="post" novalidate>
+
+        <input name="previousLocation" type="hidden" value="10" />
+        {{ extraValues | safe }}
+
+        {{ govukRadios({
+          name: 'location',
+          fieldset: {
+            legend: {
+              text: 'Which way will you go?',
+              isPageHeading: true,
+              classes: 'govuk-fieldset__legend--m'
+            }
+          },
+          items: [
+            {
+              value: 6,
+              text: 'North'
+            },
+            {
+              value: 11,
+              text: 'East'
+            },
+            {
+              value: 10,
+              text: 'South'
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: 'Choose direction'
+        }) }}
+
+    </form>
+
+  </div>
+</div>
+
+{{ data | debugData | safe }}
+
+{% endblock %}

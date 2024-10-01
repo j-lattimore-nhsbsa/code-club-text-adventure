@@ -1,0 +1,113 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">The stone cairn</h1>
+
+    <p class="govuk-heading-s">You push forward into...a clearing?</p>
+    <p class="govuk-body">A stone portal dominates the space. The oppressive vegetation of the forest has been pushed back into a perfect circle, leaving nothing but soil and rocks and the low drone of magic.</p>
+    <p class="govuk-body">But others have passed this way. A stone cairn has been stacked atop a patch of dug earth - relatively recently it would seem. What happened here? Who raised the cairn and for whom?</p>
+    
+    
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+
+    {% set directionOptions %}
+
+         <!-- EXITS 3,  S7, W2 -->
+
+        {{ govukRadios({
+          name: 'location',
+          fieldset: {
+            legend: {
+              text: 'You should move on quickly, but which direction will you take?',
+              isPageHeading: true,
+              classes: 'govuk-fieldset__legend--m'
+            }
+          },
+          items: [
+            {
+              value: 7,
+              text: 'South'
+            },
+            {
+              value: 2,
+              text: 'West'
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: 'Choose direction'
+        }) }}
+
+    {% endset %}
+
+
+    {% set thisLocation = 3 %}
+    {% set thisPage = 'the-stone-cairn' %}
+
+    {% if kelRathaLocation === thisLocation and data.portalsActive === 'true' %}
+
+      <p class="govuk-body"><em>Suddenly, a flash of lurid light and there stands KEL-RATHA!</em></p>
+
+      {% if data.hasBanana === 'true' %}
+
+        <!-- PLAYER HAS BANANA -->
+        <p class="govuk-body"><em>He takes one look at the banana in your pocket and flees! You're unsure as to why this is, but you don't question it.</em></p>
+        <hr class="govuk-section-break govuk-section-break--l">
+
+        <form action="{{ thisPage }}" method="post" novalidate>
+
+          <input name="previousLocation" type="hidden" value="{{ thisLocation }}" />
+          <input name="portalsActive" type="hidden" value="false" />
+          {{ directionOptions | safe }}
+
+        </form>
+
+      {% else %}
+
+        <!-- PLAYER IS KILLED -->
+        <p class="govuk-body"><em>With a swift flurry of steel, you soon realise just why the cairn was there, and wonder who exactly will raise one to your memory as you fall quickly and permanently to the floor.</em></p>
+        <hr class="govuk-section-break govuk-section-break--l">
+
+         {{ govukWarningText({
+          text: 'You died'
+        }) }}
+
+        <form action="reset-game" method="post" novalidate>
+          {{ govukButton({
+            text: 'Start new game'
+          }) }}
+        </form>
+
+      {% endif %}
+
+    {% else %}
+
+       <!-- PORTAL REMAINS CLOSED -->
+      <p class="govuk-body"><em>The portal hums ominously, but nothing happens.</em></p>
+      <hr class="govuk-section-break govuk-section-break--l">
+      
+      <form action="{{ thisPage }}" method="post" novalidate>
+
+        <input name="previousLocation" type="hidden" value="{{ thisLocation }}" />
+        {{ directionOptions | safe }}
+
+      </form>
+
+    {% endif %}
+
+    
+
+    
+
+  </div>
+</div>
+
+{{ data | debugData | safe }}
+
+{% endblock %}

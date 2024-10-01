@@ -1,0 +1,109 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">Along the cliff base</h1>
+
+    <p class="govuk-heading-s">You find yourself close to the base of a cliff and decide to stick close.</p>
+    <p class="govuk-body">The forest is thin here, but then you see why - another portal goads you with it's low, ominous drone.</p>
+    
+    
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+ 
+
+    {% set directionOptions %}
+     <!-- EXITS 14, N10, W13 -->
+
+        {{ govukRadios({
+          name: 'location',
+          fieldset: {
+            legend: {
+              text: 'Which way will you head next?',
+              isPageHeading: true,
+              classes: 'govuk-fieldset__legend--m'
+            }
+          },
+          items: [
+            {
+              value: 10,
+              text: 'North'
+            },
+            {
+              value: 13,
+              text: 'West'
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: 'Choose direction'
+        }) }}
+      {% endset %}
+
+
+
+      {% set thisLocation = 14 %}
+      {% set thisPage = 'along-the-cliff-base' %}
+
+    {% if kelRathaLocation === thisLocation and data.portalsActive === 'true' %}
+
+      <p class="govuk-body"><em>Suddenly, a flash of lurid light and there stands KEL-RATHA!</em></p>
+
+      {% if data.hasBanana === 'true' %}
+
+        <!-- PLAYER HAS BANANA -->
+        <p class="govuk-body"><em>He takes one step towards you and sees the top of the banana that you jammed into your pocket. Suddenly, he lets out an unimaginable shriek and runs away as fast as he arrived. You're not quite sure why, but it's good news for your quest at least.</em></p>
+        <hr class="govuk-section-break govuk-section-break--l">
+
+        <form action="{{ thisPage }}" method="post" novalidate>
+
+          <input name="previousLocation" type="hidden" value="{{ thisLocation }}" />
+          <input name="portalsActive" type="hidden" value="false" />
+          {{ directionOptions | safe }}
+
+        </form>
+
+      {% else %}
+
+        <!-- PLAYER IS KILLED -->
+        <p class="govuk-body"><em>He steps closer and you step back. He steps closer and you step back again. He steps closer and you find yourself pinned against the sheer cliff-face. It takes little time after that for his blades to work their magic.</em></p>
+        <hr class="govuk-section-break govuk-section-break--l">
+
+	{{ govukWarningText({
+          text: 'You died'
+        }) }}
+
+        <form action="reset-game" method="post" novalidate>
+          {{ govukButton({
+            text: 'Start new game'
+          }) }}
+        </form>
+
+      {% endif %}
+
+    {% else %}
+
+       <!-- PORTAL REMAINS CLOSED -->
+      <p class="govuk-body"><em>You wait for a few moments, but the portal remains closed.</em></p>
+      <hr class="govuk-section-break govuk-section-break--l">
+      
+      <form action="{{ thisPage }}" method="post" novalidate>
+
+        <input name="previousLocation" type="hidden" value="{{ thisLocation }}" />
+        {{ directionOptions | safe }}
+
+      </form>
+
+    {% endif %}
+
+
+  </div>
+</div>
+
+{{ data | debugData | safe }}
+
+{% endblock %}

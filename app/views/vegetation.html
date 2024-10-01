@@ -1,0 +1,63 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">Vegetation</h1>
+
+    <p class="govuk-heading-s">At first, you progress well through the dripping fronds and moss-covered rocks.</p>
+    <p class="govuk-body">But as you walk, the canopy of the trees seems to close in above you, sealing away the sky and wrapping itself around you in every direction. The air seems thicker somehow.</p>
+    
+    
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+    <p class="govuk-body"><em>Thankfully though, you can make out three exits. You don't need to panic...just yet.</em></p>
+
+    <hr class="govuk-section-break govuk-section-break--l">
+
+     <!-- EXITS 1,  E2, S5, W0 -->
+
+      <form action="vegetation" method="post" novalidate>
+
+        <input name="previousLocation" type="hidden" value="1" />
+
+        {{ govukRadios({
+          name: 'location',
+          fieldset: {
+            legend: {
+              text: 'Which direction will you travel in?',
+              isPageHeading: true,
+              classes: 'govuk-fieldset__legend--m'
+            }
+          },
+          items: [
+            {
+              value: 2,
+              text: 'East'
+            },
+            {
+              value: 5,
+              text: 'South'
+            },
+             {
+              value: 0,
+              text: 'West'
+            }
+
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: 'Choose direction'
+        }) }}
+
+    </form>
+
+  </div>
+</div>
+
+{{ data | debugData | safe }}
+
+{% endblock %}

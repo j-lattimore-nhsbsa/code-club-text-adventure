@@ -1,0 +1,62 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">A forest stream</h1>
+
+    <p class="govuk-heading-s">The gentle burbling of water across rock plays through the air.</p>
+    <p class="govuk-body">A stream winds its way through the forest floor away to the North, presumably you could find its source to the South, but you dimly sense magic in the air nearby.</p>
+    
+    
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+    <p class="govuk-body"><em>Maybe it's best to turn East.</em></p>
+
+    <hr class="govuk-section-break govuk-section-break--l">
+
+     <!-- EXITS 4,  N0, E5, S8 -->
+
+      <form action="a-forest-stream" method="post" novalidate>
+
+        <input name="previousLocation" type="hidden" value="4" />
+
+        {{ govukRadios({
+          name: 'location',
+          fieldset: {
+            legend: {
+              text: 'Which way now?',
+              isPageHeading: true,
+              classes: 'govuk-fieldset__legend--m'
+            }
+          },
+          items: [
+            {
+              value: 0,
+              text: 'North'
+            },
+            {
+              value: 5,
+              text: 'East'
+            },
+            {
+              value: 8,
+              text: 'South'
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: 'Choose direction'
+        }) }}
+
+    </form>
+
+  </div>
+</div>
+
+{{ data | debugData | safe }}
+
+{% endblock %}

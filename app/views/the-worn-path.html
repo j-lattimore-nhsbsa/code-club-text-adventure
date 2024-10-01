@@ -1,0 +1,115 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">The worn path</h1>
+
+    <p class="govuk-heading-s">Bones and blood litter the wide stone path you find yourself standing upon.</p>
+    <p class="govuk-body">A chill runs up your spine as your eyes dart from left to right, from a windswept skeleton to a freshly gnawed leg. You realise almost immediately that you are close to Zarlakk's lair.</p>
+    <p class="govuk-body">But things get worse. A portal guards the path - one final challenge before the end.</p>
+    <p class="govuk-body">And then you hear it - a low gutteral rumble emanating from the South. The noise dwarfs even that of the portal's drone.</p>
+
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+    {% set directionOptions %}
+
+      <!-- EXITS 11, S15, W10 -->
+        <input name="previousLocation" type="hidden" value="11" />
+
+        {{ govukRadios({
+          name: 'location',
+          fieldset: {
+            legend: {
+              text: 'Will you head towards the noise?',
+              isPageHeading: true,
+              classes: 'govuk-fieldset__legend--m'
+            }
+          },
+          items: [
+            {
+              value: 15,
+              text: 'South'
+            },
+            {
+              value: 10,
+              text: 'West'
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: 'Choose direction'
+        }) }}
+
+    {% endset %}
+
+
+
+    {% set thisLocation = 11 %}
+    {% set thisPage = 'the-worn-path' %}  
+
+    {% if kelRathaLocation === thisLocation and data.portalsActive === 'true' %}
+
+      <p class="govuk-body"><em>Suddenly, a flash of lurid light and there stands KEL-RATHA!</em></p>
+
+      {% if data.hasBanana === 'true' %}
+
+        <!-- PLAYER HAS BANANA -->
+        <p class="govuk-body"><em>The assassin steps gracefully about the human detritus. Well, at least until he gets close enough to notice the outline of the banana in your britches, at which point he turns heel and stumbles desperately, clumsily across the broken bones and squeals and flees into the distance.</em></p>
+        <p class="govuk-body"><em>You're non-plussed, but have no time to think about what all that meant.</em></p>
+
+        <hr class="govuk-section-break govuk-section-break--l">
+
+        <form action="{{ thisPage }}" method="post" novalidate>
+
+          <input name="previousLocation" type="hidden" value="{{ thisLocation }}" />
+          <input name="portalsActive" type="hidden" value="false" />
+          {{ directionOptions | safe }}
+
+        </form>
+
+      {% else %}
+
+        <!-- PLAYER IS KILLED -->
+        <p class="govuk-body"><em>It only takes a moment and a brief flash of steel blade and you find yourself amongst the bones yourself.</em></p>
+        <hr class="govuk-section-break govuk-section-break--l">
+
+	      {{ govukWarningText({
+          text: 'You died'
+        }) }}
+
+        <form action="reset-game" method="post" novalidate>
+          {{ govukButton({
+            text: 'Start new game'
+          }) }}
+        </form>
+
+      {% endif %}
+
+    {% else %}
+
+       <!-- PORTAL REMAINS CLOSED -->
+      <p class="govuk-body"><em>You breathe a sigh of relief as the portal remains closed. It's one less issue to face at least.</em></p>
+      <hr class="govuk-section-break govuk-section-break--l">
+      
+      <form action="{{ thisPage }}" method="post" novalidate>
+
+        <input name="previousLocation" type="hidden" value="{{ thisLocation }}" />
+        {{ directionOptions | safe }}
+
+      </form>
+
+    {% endif %}
+
+
+
+
+  </div>
+</div>
+
+{{ data | debugData | safe }}
+
+{% endblock %}

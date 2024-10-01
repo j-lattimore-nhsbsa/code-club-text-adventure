@@ -1,0 +1,60 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">Zarlakk's lair</h1>
+
+    <p class="govuk-heading-s">He lies there, a great green dragon curled around an obsidian pillar, carved with dark sigils that glow faintly.</p>
+    <p class="govuk-body">The scents of smoke and char and ash hang in the air. A thick miasma of menace and maliciousness.</p>
+    <p class="govuk-body">Zarlakk notices your approach and seems to smile as he slowly uncoils the full extent of his body.</p>
+    
+    <p class="govuk-body"><em>"What took you so long?"</em> a voice echoes about your mind, but all you can hear is the bass rumble of the dragon's breath.</p>
+
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+    {% if data.hasAxe === 'true' %}
+
+      <!-- PLAYER HAS THE AXE - THEY WIN! -->
+
+      <p class="govuk-body"><em>"You have the Maiden's Greataxe?" he notes and a flicker of doubt crosses his face. "No matter, you are not she and you cannot defeat me" the voice hisses.</em></p>
+      <p class="govuk-body"><em>The speed with which Zarlakk moves surprises you, but you are quicker. You raise the greataxe just in time to counter his outstretched claw and cleave it from his body in an arc of blood.</em></p>
+
+      <p class="govuk-body"><em>Zarlakk screams and flails, and in the distraction you move to finish him, the greataxe making short work of the once fearsome beast. You breathe a sigh of relief. The villagers of Wykestaff will be overjoyed when you finally get back there.</em></p>
+
+      <hr class="govuk-section-break govuk-section-break--l">
+
+      {{ govukWarningText({
+          text: 'You have defeated Zarlakk and won the game'
+        }) }}
+
+    {% else %}
+
+      <!-- PLAYER DOES NOT HAVE THE AXE - THEY LOSE! -->
+
+      <p class="govuk-body"><em>"Ah my child, worry not. I'll make this as slow and as painful as possible." Your mind is filled with a low chuckle that becomes a roar as he approaches you slowly but surely.</em></p>
+      <p class="govuk-body"><em>Zarlakk makes good on his promise and you suffer greatly before the end.</em></p>
+
+      <hr class="govuk-section-break govuk-section-break--l">
+
+      {{ govukWarningText({
+          text: 'You died'
+        }) }}
+
+    {% endif %}
+
+    <form action="reset-game" method="post" novalidate>
+          {{ govukButton({
+            text: 'Start new game'
+          }) }}
+        </form>
+
+
+  </div>
+</div>
+
+{{ data | debugData | safe }}
+
+{% endblock %}

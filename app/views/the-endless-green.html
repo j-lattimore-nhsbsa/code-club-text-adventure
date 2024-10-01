@@ -1,0 +1,62 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">The endless green</h1>
+
+    <p class="govuk-heading-s">There is nothing but green.</p>
+    <p class="govuk-body">The sky, that you presume is still there, is mired completely by dense green leaves held one atop the other stretching up for an age. Thick green roots arch lazily around your feet, seeking surely to ease you into the earth, while you determinedly resist and push forward through creaking walls of green stalks and twisting vines.</p>
+    
+    
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+    <p class="govuk-body"><em>You could turn back and find another route through, but you feel the low hum of magic from the East and the South.</em></p>
+
+    <hr class="govuk-section-break govuk-section-break--l">
+
+     <!-- EXITS 2,  E3, S6, W1 -->
+
+      <form action="the-endless-green" method="post" novalidate>
+
+        <input name="previousLocation" type="hidden" value="2" />
+
+        {{ govukRadios({
+          name: 'location',
+          fieldset: {
+            legend: {
+              text: 'Will you turn back or push on?',
+              isPageHeading: true,
+              classes: 'govuk-fieldset__legend--m'
+            }
+          },
+          items: [
+            {
+              value: 3,
+              text: 'East'
+            },
+            {
+              value: 6,
+              text: 'South'
+            },
+            {
+              value: 1,
+              text: 'West'
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: 'Choose direction'
+        }) }}
+
+    </form>
+
+  </div>
+</div>
+
+{{ data | debugData | safe }}
+
+{% endblock %}

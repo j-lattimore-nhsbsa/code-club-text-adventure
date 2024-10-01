@@ -1,0 +1,59 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">The altar</h1>
+
+    <p class="govuk-heading-s">You find yourself standing on thick marble flags that make up a circle.</p>
+    <p class="govuk-body">Intricate tiled inlays and patterns dance their way in sleek curves and arcs towards a majestic centre-piece - an elaborate altar of a pale white stone that glows softly.</p>
+    <p class="govuk-body">Carvings adorn the sides of the altar. You follow them round and a story emerges - a dark beast, a star falling to earth, a radiant maiden - a tale from a time long past.</p>
+
+    {% if data.hasAxe !== 'true' %}
+      <p class="govuk-body">You walk towards the altar, and delicately reach for the greataxe. It feels curiously warm to the touch, yet bears a satisfying heft. You attach it reverently to your belt.</p>
+    {% endif %}
+    
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+    <p class="govuk-body"><em>You take one look at the space where the greataxe once sat and decide to move on.</em></p>
+
+    <hr class="govuk-section-break govuk-section-break--l">
+
+     <!-- EXITS 7,  N3 -->
+
+      <form action="the-altar" method="post" novalidate>
+
+        <input name="previousLocation" type="hidden" value="7" />
+        <input name="hasAxe" type="hidden" value="true" />
+
+        {{ govukRadios({
+          name: 'location',
+          fieldset: {
+            legend: {
+              text: 'You had best head back the way you came...',
+              isPageHeading: true,
+              classes: 'govuk-fieldset__legend--m'
+            }
+          },
+          items: [
+            {
+              value: 3,
+              text: 'North'
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: 'Choose direction'
+        }) }}
+
+    </form>
+
+  </div>
+</div>
+
+{{ data | debugData | safe }}
+
+{% endblock %}

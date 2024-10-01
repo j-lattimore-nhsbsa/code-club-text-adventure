@@ -7,14 +7,33 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    {% include "govuk-prototype-kit/includes/homepage-top.njk" %}
+    <h1 class="govuk-heading-l">{{ serviceName }}</h1>
 
-    <h1 class="govuk-heading-l">
-      {{ serviceName }}
-    </h1>
+    <p class="govuk-heading-s">Something evil lurks in the haunted forest of Gloomglade. Everyone knows.</p>
+    <p class="govuk-body">It's been an hour since you arrived in the village of Wykestaff and already, a steady stream of haggard petitioners in roughspun cloth are telling tales about the neighbouring wood.</p>
+    <p class="govuk-body">Stories of strange noises and shrieks that sound from the trees at night. Reports of terrifying beasts and piercing eyes peeking out from the branches.</p>
+    <p class="govuk-body">But most interesting of all are the disjointed whispers of an ancient dragon and an enchanted axe, said to be the only thing that can pierce his scaly hide.</p>
 
-    {% include "govuk-prototype-kit/includes/homepage-bottom.njk" %}
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+    <p class="govuk-body"><em>You've heard enough. With a spring in your step, you make your way eagerly into the trees.</em></p>
+
+    <hr class="govuk-section-break govuk-section-break--l ">
+
+    <form action="index" method="post" novalidate>
+
+      <input name="previousLocation" type="hidden" value="-1" />
+
+      {{ govukButton({
+        text: 'Enter Gloomglade',
+        isStartButton: true
+      }) }}
+
+    </form>
+
   </div>
 </div>
+
+{{ data | debugData | safe }}
 
 {% endblock %}

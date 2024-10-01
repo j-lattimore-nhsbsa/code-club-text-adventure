@@ -1,0 +1,110 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">Signs of a scuffle</h1>
+
+    <p class="govuk-heading-s">The forest stops and in the circular clearing stands a stone portal.</p>
+    <p class="govuk-body">But the ground here is scuffed and broken. Deep grooves and broken branches are strewn across the space. And here and there...is that blood? Clearly a great battle took place here.</p>
+    
+    
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+     {% set directionOptions %}
+
+     <!-- EXITS 6,  N2, S10 -->
+
+        {{ govukRadios({
+          name: 'location',
+          fieldset: {
+            legend: {
+              text: 'Time to make a choice...',
+              isPageHeading: true,
+              classes: 'govuk-fieldset__legend--m'
+            }
+          },
+          items: [
+            {
+              value: 2,
+              text: 'North'
+            },
+            {
+              value: 10,
+              text: 'South'
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: 'Choose direction'
+        }) }}
+
+     {% endset %}
+
+
+    {% set thisLocation = 6 %}
+    {% set thisPage = 'signs-of-a-scuffle' %}
+
+    {% if kelRathaLocation === thisLocation and data.portalsActive === 'true' %}
+
+      <p class="govuk-body"><em>Suddenly, a flash of lurid light and there stands KEL-RATHA!</em></p>
+
+      {% if data.hasBanana === 'true' %}
+
+        <!-- PLAYER HAS BANANA -->
+        <p class="govuk-body"><em>You gasp! He looks so fearsome! How could you ever beat such a formidable warrior? He looks you up and down with barely concealed disgust - but then you see his gaze become fixed on the banana peaking out the top of your pocket. He shrieks and flees immediately. Weird, but you'll take it.</em></p>
+        <hr class="govuk-section-break govuk-section-break--l">
+
+        <form action="{{ thisPage }}" method="post" novalidate>
+
+          <input name="previousLocation" type="hidden" value="{{ thisLocation }}" />
+          <input name="portalsActive" type="hidden" value="false" />
+          {{ directionOptions | safe }}
+
+        </form>
+
+      {% else %}
+
+        <!-- PLAYER IS KILLED -->
+        <p class="govuk-body"><em>He attacks! Such grace and skill leave you feeling...well, literally breathless as your head slides off your neck and you crash to the floor.</em></p>
+        
+        {{ govukWarningText({
+          text: 'You died'
+        }) }}
+        
+        <hr class="govuk-section-break govuk-section-break--l">
+
+        <form action="reset-game" method="post" novalidate>
+          {{ govukButton({
+            text: 'Start new game'
+          }) }}
+        </form>
+
+      {% endif %}
+
+    {% else %}
+
+       <!-- PORTAL REMAINS CLOSED -->
+      <p class="govuk-body"><em>You keep your eyes fixed firmly on the portal, but thankfully, nothing happens.</em></p>
+      <hr class="govuk-section-break govuk-section-break--l">
+      
+      <form action="{{ thisPage }}" method="post" novalidate>
+
+        <input name="previousLocation" type="hidden" value="{{ thisLocation }}" />
+        {{ directionOptions | safe }}
+
+      </form>
+
+    {% endif %}
+
+
+
+  </div>
+</div>
+
+{{ data | debugData | safe }}
+
+{% endblock %}

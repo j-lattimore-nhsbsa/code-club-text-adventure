@@ -1,0 +1,66 @@
+{% extends "layouts/main.html" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-l">The old apple tree</h1>
+
+    <p class="govuk-heading-s">With one big heave through the foliage, you step out into a clearing and notice a lone apple tree.</p>
+    <p class="govuk-body">It looks like its been here for years, its branches gnarled and twisted, but there's fruit here. A veritable bounty of juicy red apples. They look so tempting.</p>
+
+     {% if data.hasApple !== 'true' %}
+      <p class="govuk-body">You delicately pluck a single apple from the tree and pop it into your knapsack for later. It surely can't do any harm.</p>
+    {% endif %}
+    
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+    <p class="govuk-body"><em>With a spring in your step, you decide to move on.</em></p>
+
+    <hr class="govuk-section-break govuk-section-break--l">
+
+     <!-- EXITS 9,  N5, S13, W8 -->
+
+      <form action="the-old-apple-tree" method="post" novalidate>
+
+        <input name="previousLocation" type="hidden" value="9" />
+        <input name="hasApple" type="hidden" value="true" />
+
+        {{ govukRadios({
+          name: 'location',
+          fieldset: {
+            legend: {
+              text: 'Which direction will you take next?',
+              isPageHeading: true,
+              classes: 'govuk-fieldset__legend--m'
+            }
+          },
+          items: [
+            {
+              value: 5,
+              text: 'North'
+            },
+            {
+              value: 13,
+              text: 'South'
+            },
+            {
+              value: 8,
+              text: 'West'
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          text: 'Choose direction'
+        }) }}
+
+    </form>
+
+  </div>
+</div>
+
+{{ data | debugData | safe }}
+
+{% endblock %}
