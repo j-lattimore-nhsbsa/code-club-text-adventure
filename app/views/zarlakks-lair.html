@@ -30,6 +30,30 @@
           text: 'You have defeated Zarlakk and won the game'
         }) }}
 
+        <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+        <script>
+
+          (function frame() {
+            confetti({
+              particleCount: 2,
+              angle: 60,
+              spread: 55,
+              origin: { x: 0 }
+            });
+
+            confetti({
+              particleCount: 2,
+              angle: 120,
+              spread: 55,
+              origin: { x: 1 }
+            });
+
+            requestAnimationFrame(frame);
+            
+          })();
+           
+        </script>
+
     {% else %}
 
       <!-- PLAYER DOES NOT HAVE THE AXE - THEY LOSE! -->
